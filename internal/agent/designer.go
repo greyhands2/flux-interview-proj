@@ -6,12 +6,11 @@ import (
 	"fmt"
 	"strings"
 
-	"adstudio/internal/graph"
 	"adstudio/internal/model"
 )
 
 // GenerateHTML invokes the designer agent to generate a clean, responsive HTML landing page.
-func GenerateHTML(ctx context.Context, m model.Model, brief *graph.Brief, c *graph.Copy, failedChecks []graph.CheckResult) (string, error) {
+func GenerateHTML(ctx context.Context, m model.Model, brief *Brief, c *Copy, failedChecks []CheckFailure) (string, error) {
 	if c == nil {
 		return "", fmt.Errorf("designer requires valid copy")
 	}

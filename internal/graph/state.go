@@ -1,5 +1,10 @@
 package graph
 
+import (
+	"adstudio/internal/agent"
+	"adstudio/internal/checker"
+)
+
 // FinalStatus represents the final status of the pipeline run.
 type FinalStatus string
 
@@ -8,38 +13,11 @@ const (
 	StatusNeedsHumanReview FinalStatus = "needs_human_review"
 )
 
-// Brief holds the campaign strategy created by the strategist.
-type Brief struct {
-	Audience             string   `json:"audience"`
-	Offer                string   `json:"offer"`
-	Tone                 string   `json:"tone"`
-	AllowedClaims        []string `json:"allowed_claims"`
-	BannedClaims         []string `json:"banned_claims"`
-	AllowedBannedPhrases []string `json:"allowed_banned_phrases,omitempty"`
-}
-
-// Copy holds the marketing content produced by the copywriter.
-type Copy struct {
-	Headline   string   `json:"headline"`
-	Subhead    string   `json:"subhead"`
-	Benefits   []string `json:"benefits"`
-	CTA        string   `json:"cta"`
-	Disclaimer string   `json:"disclaimer"`
-	Claims     []string `json:"claims"`
-}
-
-// CheckResult records a deterministic check outcome.
-type CheckResult struct {
-	Name    string `json:"name"`
-	Passed  bool   `json:"passed"`
-	Message string `json:"message,omitempty"`
-}
-
-// Review holds advisory feedback from the reviewer agent.
-type Review struct {
-	Score    int    `json:"score"`
-	Feedback string `json:"feedback"`
-}
+// Aliases for domain models.
+type Brief = agent.Brief
+type Copy = agent.Copy
+type Review = agent.Review
+type CheckResult = checker.Result
 
 // TraceEntry records a discrete execution step in the pipeline.
 type TraceEntry struct {

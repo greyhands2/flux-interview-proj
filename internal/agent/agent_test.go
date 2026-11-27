@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"adstudio/internal/agent"
-	"adstudio/internal/graph"
 	"adstudio/internal/model"
 )
 
@@ -91,7 +90,7 @@ func TestStrategist(t *testing.T) {
 
 func TestCopywriter(t *testing.T) {
 	ctx := context.Background()
-	brief := &graph.Brief{
+	brief := &agent.Brief{
 		Audience:      "Dog owners",
 		Offer:         "Organic pet food subscription",
 		Tone:          "Friendly",
@@ -124,7 +123,7 @@ func TestCopywriter(t *testing.T) {
 		resp := `{"headline":"Revised Headline","subhead":"Better copy.","benefits":["B1","B2","B3"],"cta":"Buy","disclaimer":"Demo","claims":["Grain free"]}`
 		m := &inspectingModel{response: resp}
 
-		failedChecks := []graph.CheckResult{
+		failedChecks := []agent.CheckFailure{
 			{Name: "banned_phrases", Message: "banned phrase detected: 'guaranteed'"},
 		}
 		_, err := agent.GenerateCopy(ctx, m, brief, failedChecks)
@@ -147,8 +146,8 @@ func TestCopywriter(t *testing.T) {
 
 func TestDesigner(t *testing.T) {
 	ctx := context.Background()
-	brief := &graph.Brief{Audience: "Coffee lovers", Offer: "Fresh roast subscription"}
-	copyData := &graph.Copy{
+	brief := &agent.Brief{Audience: "Coffee lovers", Offer: "Fresh roast subscription"}
+	copyData := &agent.Copy{
 		Headline:   "Fresh Coffee Weekly",
 		Subhead:    "Direct from micro-lots",
 		Benefits:   []string{"Whole bean", "Fair trade", "Weekly roast"},
@@ -180,7 +179,7 @@ func TestDesigner(t *testing.T) {
 	t.Run("revision prompt includes failed checks", func(t *testing.T) {
 		html := `<html><body>Revised</body></html>`
 		m := &inspectingModel{response: html}
-		failedChecks := []graph.CheckResult{
+		failedChecks := []agent.CheckFailure{
 			{Name: "viewport_meta", Message: "HTML missing viewport meta tag"},
 		}
 
@@ -204,7 +203,7 @@ func TestDesigner(t *testing.T) {
 
 func TestReviewer(t *testing.T) {
 	ctx := context.Background()
-	copyData := &graph.Copy{Headline: "Test Headline", Subhead: "Test Subhead", CTA: "Test CTA"}
+	copyData := &agent.Copy{Headline: "Test Headline", Subhead: "Test Subhead", CTA: "Test CTA"}
 	html := `<html><body><h1>Test Headline</h1></body></html>`
 
 	t.Run("valid review json parses cleanly", func(t *testing.T) {

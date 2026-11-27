@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"adstudio/internal/graph"
+	"adstudio/internal/agent"
 )
 
 // Standard check identifiers.
@@ -19,6 +19,13 @@ const (
 	NameSingleH1             = "single_h1"
 	NameWellFormed           = "well_formed"
 )
+
+// Result records a deterministic check outcome.
+type Result struct {
+	Name    string `json:"name"`
+	Passed  bool   `json:"passed"`
+	Message string `json:"message,omitempty"`
+}
 
 // Default banned phrases (case-insensitive).
 var DefaultBannedPhrases = []string{
@@ -34,9 +41,9 @@ var (
 )
 
 // CheckRequiredCopySections ensures Headline, Benefits (at least 3), CTA, and Disclaimer exist in the copy.
-func CheckRequiredCopySections(c *graph.Copy) graph.CheckResult {
+func CheckRequiredCopySections(c *agent.Copy) Result {
 	if c == nil {
-		return graph.CheckResult{
+		return Result{
 			Name:    NameRequiredCopySections,
 			Passed:  false,
 			Message: "copy is nil",
@@ -64,23 +71,23 @@ func CheckRequiredCopySections(c *graph.Copy) graph.CheckResult {
 	}
 
 	if len(missing) > 0 {
-		return graph.CheckResult{
+		return Result{
 			Name:    NameRequiredCopySections,
 			Passed:  false,
 			Message: "missing required copy section(s): " + strings.Join(missing, ", "),
 		}
 	}
 
-	return graph.CheckResult{
+	return Result{
 		Name:   NameRequiredCopySections,
 		Passed: true,
 	}
 }
 
 // CheckRequiredHTMLSections ensures the rendered HTML includes Headline, Benefits, CTA, and Disclaimer.
-func CheckRequiredHTMLSections(c *graph.Copy, html string) graph.CheckResult {
+func CheckRequiredHTMLSections(c *agent.Copy, html string) Result {
 	if strings.TrimSpace(html) == "" {
-		return graph.CheckResult{
+		return Result{
 			Name:    NameRequiredHTMLSections,
 			Passed:  false,
 			Message: "HTML is empty",
@@ -113,21 +120,21 @@ func CheckRequiredHTMLSections(c *graph.Copy, html string) graph.CheckResult {
 	}
 
 	if len(missing) > 0 {
-		return graph.CheckResult{
+		return Result{
 			Name:    NameRequiredHTMLSections,
 			Passed:  false,
 			Message: "HTML missing required section(s): " + strings.Join(missing, ", "),
 		}
 	}
 
-	return graph.CheckResult{
+	return Result{
 		Name:   NameRequiredHTMLSections,
 		Passed: true,
 	}
 }
 
 // CheckBannedPhrases scans copy and HTML for banned phrases unless explicitly allowed in brief.
-func CheckBannedPhrases(b *graph.Brief, c *graph.Copy, html string) graph.CheckResult {
+func CheckBannedPhrases(b *agent.Brief, c *agent.Copy, html string) Result {
 	allowedSet := make(map[string]bool)
 	if b != nil {
 		for _, phrase := range b.AllowedBannedPhrases {
@@ -135,7 +142,6 @@ func CheckBannedPhrases(b *graph.Brief, c *graph.Copy, html string) graph.CheckR
 		}
 	}
 
-	// Gather text to scan
 	var corpus []string
 	if c != nil {
 		corpus = append(corpus, c.Headline, c.Subhead, c.CTA, c.Disclaimer)
@@ -151,7 +157,7 @@ func CheckBannedPhrases(b *graph.Brief, c *graph.Copy, html string) graph.CheckR
 			continue
 		}
 		if strings.Contains(combinedText, lowerPhrase) {
-			return graph.CheckResult{
+			return Result{
 				Name:    NameBannedPhrases,
 				Passed:  false,
 				Message: fmt.Sprintf("banned phrase detected: '%s'", phrase),
@@ -159,23 +165,23 @@ func CheckBannedPhrases(b *graph.Brief, c *graph.Copy, html string) graph.CheckR
 		}
 	}
 
-	return graph.CheckResult{
+	return Result{
 		Name:   NameBannedPhrases,
 		Passed: true,
 	}
 }
 
 // CheckClaims verifies that all copy claims are strictly present in the brief's allowed claims.
-func CheckClaims(b *graph.Brief, c *graph.Copy) graph.CheckResult {
+func CheckClaims(b *agent.Brief, c *agent.Copy) Result {
 	if b == nil {
-		return graph.CheckResult{
+		return Result{
 			Name:    NameClaims,
 			Passed:  false,
 			Message: "brief is nil",
 		}
 	}
 	if c == nil {
-		return graph.CheckResult{
+		return Result{
 			Name:    NameClaims,
 			Passed:  false,
 			Message: "copy is nil",
@@ -193,7 +199,7 @@ func CheckClaims(b *graph.Brief, c *graph.Copy) graph.CheckResult {
 			continue
 		}
 		if !allowed[norm] {
-			return graph.CheckResult{
+			return Result{
 				Name:    NameClaims,
 				Passed:  false,
 				Message: fmt.Sprintf("claim not in allowed claims: '%s'", claim),
@@ -201,16 +207,16 @@ func CheckClaims(b *graph.Brief, c *graph.Copy) graph.CheckResult {
 		}
 	}
 
-	return graph.CheckResult{
+	return Result{
 		Name:   NameClaims,
 		Passed: true,
 	}
 }
 
 // CheckHeadlineLength ensures headline is 12 words or fewer.
-func CheckHeadlineLength(c *graph.Copy) graph.CheckResult {
+func CheckHeadlineLength(c *agent.Copy) Result {
 	if c == nil {
-		return graph.CheckResult{
+		return Result{
 			Name:    NameHeadlineLength,
 			Passed:  false,
 			Message: "copy is nil",
@@ -219,94 +225,94 @@ func CheckHeadlineLength(c *graph.Copy) graph.CheckResult {
 
 	words := strings.Fields(c.Headline)
 	if len(words) > 12 {
-		return graph.CheckResult{
+		return Result{
 			Name:    NameHeadlineLength,
 			Passed:  false,
 			Message: fmt.Sprintf("headline exceeds 12 words (got %d words)", len(words)),
 		}
 	}
 
-	return graph.CheckResult{
+	return Result{
 		Name:   NameHeadlineLength,
 		Passed: true,
 	}
 }
 
 // CheckViewportMeta ensures the HTML contains a viewport meta tag.
-func CheckViewportMeta(html string) graph.CheckResult {
+func CheckViewportMeta(html string) Result {
 	if !viewportRegex.MatchString(html) {
-		return graph.CheckResult{
+		return Result{
 			Name:    NameViewportMeta,
 			Passed:  false,
 			Message: "HTML missing viewport meta tag",
 		}
 	}
 
-	return graph.CheckResult{
+	return Result{
 		Name:   NameViewportMeta,
 		Passed: true,
 	}
 }
 
 // CheckSingleH1 ensures the HTML has exactly one <h1> tag.
-func CheckSingleH1(html string) graph.CheckResult {
+func CheckSingleH1(html string) Result {
 	matches := h1TagRegex.FindAllString(html, -1)
 	count := len(matches)
 
 	if count == 0 {
-		return graph.CheckResult{
+		return Result{
 			Name:    NameSingleH1,
 			Passed:  false,
 			Message: "HTML has no <h1> tag",
 		}
 	}
 	if count > 1 {
-		return graph.CheckResult{
+		return Result{
 			Name:    NameSingleH1,
 			Passed:  false,
 			Message: fmt.Sprintf("HTML has %d <h1> tags (expected exactly 1)", count),
 		}
 	}
 
-	return graph.CheckResult{
+	return Result{
 		Name:   NameSingleH1,
 		Passed: true,
 	}
 }
 
 // CheckWellFormed ensures all required elements exist and parse cleanly.
-func CheckWellFormed(b *graph.Brief, c *graph.Copy, html string) graph.CheckResult {
+func CheckWellFormed(b *agent.Brief, c *agent.Copy, html string) Result {
 	if b == nil {
-		return graph.CheckResult{
+		return Result{
 			Name:    NameWellFormed,
 			Passed:  false,
 			Message: "strategist brief is missing or malformed",
 		}
 	}
 	if c == nil {
-		return graph.CheckResult{
+		return Result{
 			Name:    NameWellFormed,
 			Passed:  false,
 			Message: "copywriter output is missing or malformed",
 		}
 	}
 	if strings.TrimSpace(html) == "" {
-		return graph.CheckResult{
+		return Result{
 			Name:    NameWellFormed,
 			Passed:  false,
 			Message: "designer HTML is missing or empty",
 		}
 	}
 
-	return graph.CheckResult{
+	return Result{
 		Name:   NameWellFormed,
 		Passed: true,
 	}
 }
 
 // RunAllChecks runs all 7 deterministic checks on the generated artifacts.
-func RunAllChecks(b *graph.Brief, c *graph.Copy, html string) []graph.CheckResult {
-	return []graph.CheckResult{
+func RunAllChecks(b *agent.Brief, c *agent.Copy, html string) []Result {
+	return []Result{
 		CheckWellFormed(b, c, html),
 		CheckRequiredCopySections(c),
 		CheckRequiredHTMLSections(c, html),
@@ -319,7 +325,7 @@ func RunAllChecks(b *graph.Brief, c *graph.Copy, html string) []graph.CheckResul
 }
 
 // AllPassed returns true if every check passed.
-func AllPassed(results []graph.CheckResult) bool {
+func AllPassed(results []Result) bool {
 	for _, r := range results {
 		if !r.Passed {
 			return false
@@ -329,7 +335,7 @@ func AllPassed(results []graph.CheckResult) bool {
 }
 
 // HasCopyFailure checks if any copy-specific rule failed.
-func HasCopyFailure(results []graph.CheckResult) bool {
+func HasCopyFailure(results []Result) bool {
 	for _, r := range results {
 		if !r.Passed {
 			switch r.Name {
@@ -342,7 +348,7 @@ func HasCopyFailure(results []graph.CheckResult) bool {
 }
 
 // HasHTMLFailure checks if any HTML/designer-specific rule failed.
-func HasHTMLFailure(results []graph.CheckResult) bool {
+func HasHTMLFailure(results []Result) bool {
 	for _, r := range results {
 		if !r.Passed {
 			switch r.Name {

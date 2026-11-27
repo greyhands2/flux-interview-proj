@@ -3,12 +3,12 @@ package checker_test
 import (
 	"testing"
 
+	"adstudio/internal/agent"
 	"adstudio/internal/checker"
-	"adstudio/internal/graph"
 )
 
-func validTestBrief() *graph.Brief {
-	return &graph.Brief{
+func validTestBrief() *agent.Brief {
+	return &agent.Brief{
 		Audience: "Active runners",
 		Offer:    "Ergonomic running socks",
 		Tone:     "Energetic",
@@ -24,8 +24,8 @@ func validTestBrief() *graph.Brief {
 	}
 }
 
-func validTestCopy() *graph.Copy {
-	return &graph.Copy{
+func validTestCopy() *agent.Copy {
+	return &agent.Copy{
 		Headline: "Run Further With Cloud Comfort Everyday",
 		Subhead:  "Ergonomic socks engineered for daily long runs.",
 		Benefits: []string{
