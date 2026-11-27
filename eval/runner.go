@@ -92,8 +92,57 @@ func RunCase(ctx context.Context, runner graph.Runner, tc TestCase) CaseResult {
 
 	res.ActualStatus = string(state.Status)
 	res.ActualRoute = strings.Join(state.RouteHistory, " -> ")
-	res.Passed = (string(state.Status) == tc.ExpectedStatus)
+
+	// Validate both expected status and expected route/revision behavior
+	passed, failureReason := verifyRouteAndStatus(tc, state)
+	res.Passed = passed
+	if !passed {
+		res.ErrorMessage = failureReason
+	}
+
 	return res
+}
+
+// verifyRouteAndStatus verifies that the state matches expected status and routing constraints from docs/harness-eval.md.
+func verifyRouteAndStatus(tc TestCase, state *graph.State) (bool, string) {
+	if string(state.Status) != tc.ExpectedStatus {
+		return false, fmt.Sprintf("expected status %s, got %s", tc.ExpectedStatus, state.Status)
+	}
+
+	switch tc.ID {
+	case 1:
+		// Baseline: approved, 0 revisions
+		if state.RevisionCount != 0 {
+			return false, fmt.Sprintf("case 1 baseline expected 0 revisions, got %d", state.RevisionCount)
+		}
+	case 2:
+		// Banned phrase caught -> 1 copywriter revision -> approved
+		if state.RevisionCount != 1 {
+			return false, fmt.Sprintf("case 2 expected 1 revision, got %d", state.RevisionCount)
+		}
+	case 3:
+		// Claim check fails -> 1 revision -> fails again -> needs_human_review
+		if state.RevisionCount != 1 {
+			return false, fmt.Sprintf("case 3 expected 1 revision, got %d", state.RevisionCount)
+		}
+	case 4:
+		// Missing section caught -> 1 designer revision -> approved
+		if state.RevisionCount != 1 {
+			return false, fmt.Sprintf("case 4 expected 1 revision, got %d", state.RevisionCount)
+		}
+	case 5:
+		// Strategist broken JSON -> needs_human_review, no revision
+		if state.RevisionCount != 0 {
+			return false, fmt.Sprintf("case 5 expected 0 revisions (no revision on strategist failure), got %d", state.RevisionCount)
+		}
+	case 6:
+		// Headline length failure repeated -> 1 revision -> needs_human_review
+		if state.RevisionCount != 1 {
+			return false, fmt.Sprintf("case 6 expected 1 revision, got %d", state.RevisionCount)
+		}
+	}
+
+	return true, ""
 }
 
 // FormatReport formats the list of CaseResults into a table matching docs/harness-eval.md.
@@ -104,7 +153,7 @@ func FormatReport(results []CaseResult) string {
 
 	passedCount := 0
 	for _, r := range results {
-		caseLabel := fmt.Sprintf("%d: %s", r.Case.ID, r.Case.Name)
+		caseLabel := fmt.Sprintf("%d", r.Case.ID)
 		passLabel := "FAIL"
 		if r.Passed {
 			passLabel = "PASS"
