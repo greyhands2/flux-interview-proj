@@ -6,12 +6,11 @@ import (
 	"fmt"
 	"strings"
 
-	"adstudio/internal/graph"
 	"adstudio/internal/model"
 )
 
 // GenerateCopy invokes the copywriter agent to write marketing copy based on the strategist brief.
-func GenerateCopy(ctx context.Context, m model.Model, brief *graph.Brief, failedChecks []graph.CheckResult) (*graph.Copy, error) {
+func GenerateCopy(ctx context.Context, m model.Model, brief *Brief, failedChecks []CheckFailure) (*Copy, error) {
 	if brief == nil {
 		return nil, fmt.Errorf("copywriter requires a valid brief")
 	}
@@ -59,7 +58,7 @@ func GenerateCopy(ctx context.Context, m model.Model, brief *graph.Brief, failed
 	}
 
 	sanitized := SanitizeJSON(raw)
-	var copyResult graph.Copy
+	var copyResult Copy
 	if err := json.Unmarshal([]byte(sanitized), &copyResult); err != nil {
 		return nil, fmt.Errorf("copywriter output malformed JSON: %w (raw output: %q)", err, raw)
 	}

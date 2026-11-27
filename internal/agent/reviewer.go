@@ -6,13 +6,12 @@ import (
 	"fmt"
 	"strings"
 
-	"adstudio/internal/graph"
 	"adstudio/internal/model"
 )
 
 // ReviewPage invokes the reviewer agent to provide advisory tone and clarity feedback.
 // Note: This score is advisory and logged only; it never gates or overrides checker outcomes.
-func ReviewPage(ctx context.Context, m model.Model, c *graph.Copy, html string) (*graph.Review, error) {
+func ReviewPage(ctx context.Context, m model.Model, c *Copy, html string) (*Review, error) {
 	var sb strings.Builder
 	sb.WriteString("You are an advisory creative director reviewing a fictional product landing page.\n")
 	sb.WriteString("Evaluate the copy and HTML for tone, clarity, and overall marketing effectiveness.\n\n")
@@ -35,10 +34,10 @@ func ReviewPage(ctx context.Context, m model.Model, c *graph.Copy, html string) 
 	}
 
 	sanitized := SanitizeJSON(raw)
-	var review graph.Review
+	var review Review
 	if err := json.Unmarshal([]byte(sanitized), &review); err != nil {
 		// Provide graceful advisory fallback if reviewer output had unparseable formatting
-		return &graph.Review{
+		return &Review{
 			Score:    5,
 			Feedback: fmt.Sprintf("Advisory reviewer note: %s", strings.TrimSpace(raw)),
 		}, nil

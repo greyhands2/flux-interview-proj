@@ -6,12 +6,11 @@ import (
 	"fmt"
 	"strings"
 
-	"adstudio/internal/graph"
 	"adstudio/internal/model"
 )
 
 // GenerateBrief invokes the strategist agent to develop a marketing strategy brief.
-func GenerateBrief(ctx context.Context, m model.Model, idea string) (*graph.Brief, error) {
+func GenerateBrief(ctx context.Context, m model.Model, idea string) (*Brief, error) {
 	prompt := fmt.Sprintf(`You are an expert marketing strategist for a fictional brand campaign.
 Analyze the following idea and produce a comprehensive campaign brief:
 
@@ -37,7 +36,7 @@ JSON Schema:
 	}
 
 	sanitized := SanitizeJSON(raw)
-	var brief graph.Brief
+	var brief Brief
 	if err := json.Unmarshal([]byte(sanitized), &brief); err != nil {
 		return nil, fmt.Errorf("strategist output malformed JSON: %w (raw output: %q)", err, raw)
 	}
