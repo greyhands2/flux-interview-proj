@@ -1,4 +1,6 @@
-.PHONY: check format lint test eval build clean
+.DEFAULT_GOAL := check
+
+.PHONY: check format lint test eval build clean run
 
 check: format lint test
 	@echo "All checks passed."
@@ -43,3 +45,14 @@ build:
 
 clean:
 	@rm -rf bin page.html brief.json trace.json
+
+run:
+	@if [ -n "$(IDEA)" ]; then \
+		go run ./cmd/adstudio "$(IDEA)"; \
+	else \
+		go run ./cmd/adstudio "landing page for Strand, a fictional hair care subscription"; \
+	fi
+
+# Catch-all pattern: allows running `make "idea text"` directly
+%:
+	@go run ./cmd/adstudio "$@"

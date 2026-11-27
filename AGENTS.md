@@ -15,12 +15,14 @@ Ad Studio is a CLI tool that turns a one-line idea into a compliant one-page HTM
   - `internal/checker/` - Deterministic rule checks (sections, banned phrases, claims, HTML validation).
   - `internal/graph/` - State machine, router, and trace logger.
   - `internal/model/` - Model adapter (fake scripted responses and live Gemini client).
+  - `internal/output/` - Root artifact persistence (page.html, brief.json, trace.json).
   - `eval/` - 6 scripted regression eval test cases.
   - `docs/` - System specifications (`product-brief.md`, `graph.md`, `harness-eval.md`).
 
 ## 3. Build, Run, and Test Commands
 - **Check (Format, Lint, Tests)**: `make check` (runs `gofmt`, `go vet`, and unit tests).
 - **Eval (Regression Suite)**: `make eval` (runs the 6 deterministic eval cases with fake models).
+- **Run via Make**: `make "landing page for Strand, a fictional hair care subscription"`
 - **Run CLI**: `go run ./cmd/adstudio "landing page for Strand, a fictional hair care subscription"`
 - **Build Binary**: `make build` (compiles binary to `bin/adstudio`).
 
