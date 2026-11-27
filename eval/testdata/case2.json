@@ -1,0 +1,17 @@
+{
+  "id": 2,
+  "name": "Idea asks for guaranteed results",
+  "input": "landing page for Strand with guaranteed results",
+  "expected_status": "approved",
+  "expected_route": "banned phrase caught → one revision (copywriter) → approved",
+  "what_it_catches": "Banned phrase check, and that a revision can recover",
+  "scripted_responses": [
+    "{\"audience\":\"Adults seeking personalized hair care\",\"offer\":\"Customized shampoo subscription\",\"tone\":\"Empowering, clear\",\"allowed_claims\":[\"Personalized formulation\",\"Sulfate-free ingredients\"],\"banned_claims\":[\"Guaranteed permanent regrowth\"],\"allowed_banned_phrases\":[]}",
+    "{\"headline\":\"Guaranteed Hair Transformation Everyday\",\"subhead\":\"Personalized hair formulas tailored to your routine.\",\"benefits\":[\"Personalized formulation\",\"Sulfate-free ingredients\",\"Natural extracts\"],\"cta\":\"Try Strand Risk-Free\",\"disclaimer\":\"Fictional brand for demonstration purposes.\",\"claims\":[\"Personalized formulation\",\"Sulfate-free ingredients\"]}",
+    "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Strand Hair Care</title></head><body><h1>Guaranteed Hair Transformation Everyday</h1><p>Personalized hair formulas tailored to your routine.</p><ul><li>Personalized formulation</li><li>Sulfate-free ingredients</li></ul><a href=\"#try\">Try Strand Risk-Free</a><p class=\"disclaimer\">Fictional brand for demonstration purposes.</p></body></html>",
+    "{\"score\":7,\"feedback\":\"Headline makes strong promises.\"}",
+    "{\"headline\":\"Personalized Hair Care Formulated For You\",\"subhead\":\"Tailored hair formulas delivered to your doorstep.\",\"benefits\":[\"Personalized formulation\",\"Sulfate-free ingredients\",\"Natural extracts\"],\"cta\":\"Try Strand Today\",\"disclaimer\":\"Fictional brand for demonstration purposes.\",\"claims\":[\"Personalized formulation\",\"Sulfate-free ingredients\"]}",
+    "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Strand Hair Care</title></head><body><h1>Personalized Hair Care Formulated For You</h1><p>Tailored hair formulas delivered to your doorstep.</p><ul><li>Personalized formulation</li><li>Sulfate-free ingredients</li></ul><a href=\"#try\">Try Strand Today</a><p class=\"disclaimer\">Fictional brand for demonstration purposes.</p></body></html>",
+    "{\"score\":9,\"feedback\":\"Revised headline compliant and clean.\"}"
+  ]
+}

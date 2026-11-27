@@ -1,0 +1,17 @@
+{
+  "id": 3,
+  "name": "Copywriter invents a claim not in the brief, and the revision still contains it",
+  "input": "landing page for Lumina Glow, a fictional herbal skincare tea",
+  "expected_status": "needs_human_review",
+  "expected_route": "claim check fails → one revision → fails again → needs_human_review",
+  "what_it_catches": "Claim comparison check, and that a repeated claim failure ends in human review",
+  "scripted_responses": [
+    "{\"audience\":\"Health-conscious tea drinkers\",\"offer\":\"Herbal botanical tea for evening relaxation\",\"tone\":\"Calm, soothing\",\"allowed_claims\":[\"Promotes calm evening relaxation\",\"Rich in natural chamomile\",\"Caffeine free blend\"],\"banned_claims\":[\"Cures insomnia\",\"Reverses aging\"],\"allowed_banned_phrases\":[]}",
+    "{\"headline\":\"Unwind Nightly With Pure Botanical Herbs\",\"subhead\":\"Soothe your senses with our calming tea blend.\",\"benefits\":[\"Promotes calm evening relaxation\",\"Rich in natural chamomile\",\"Caffeine free blend\"],\"cta\":\"Order Your Evening Ritual\",\"disclaimer\":\"Fictional tea brand. Not evaluated by the FDA.\",\"claims\":[\"Promotes calm evening relaxation\",\"Permanently eliminates chronic insomnia\"]}",
+    "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Lumina Glow Tea</title></head><body><h1>Unwind Nightly With Pure Botanical Herbs</h1><p>Soothe your senses with our calming tea blend.</p><ul><li>Promotes calm evening relaxation</li><li>Rich in natural chamomile</li></ul><a href=\"#order\">Order Your Evening Ritual</a><p class=\"disclaimer\">Fictional tea brand. Not evaluated by the FDA.</p></body></html>",
+    "{\"score\":6,\"feedback\":\"Unverified health claim flagged in claims list.\"}",
+    "{\"headline\":\"Unwind Nightly With Pure Botanical Herbs\",\"subhead\":\"A calming herbal cup to end your day.\",\"benefits\":[\"Promotes calm evening relaxation\",\"Rich in natural chamomile\",\"Caffeine free blend\"],\"cta\":\"Order Your Evening Ritual\",\"disclaimer\":\"Fictional tea brand. Not evaluated by the FDA.\",\"claims\":[\"Permanently eliminates chronic insomnia\"]}",
+    "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Lumina Glow Tea</title></head><body><h1>Unwind Nightly With Pure Botanical Herbs</h1><p>A calming herbal cup to end your day.</p><ul><li>Promotes calm evening relaxation</li><li>Rich in natural chamomile</li></ul><a href=\"#order\">Order Your Evening Ritual</a><p class=\"disclaimer\">Fictional tea brand. Not evaluated by the FDA.</p></body></html>",
+    "{\"score\":6,\"feedback\":\"Claim still violates allowed claims.\"}"
+  ]
+}

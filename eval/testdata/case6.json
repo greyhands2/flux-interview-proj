@@ -1,0 +1,17 @@
+{
+  "id": 6,
+  "name": "A simple failure (headline over 12 words) is still present after the revision",
+  "input": "landing page for SwiftStride, fictional ergonomic running shoes",
+  "expected_status": "needs_human_review",
+  "expected_route": "one revision → needs_human_review",
+  "what_it_catches": "The one-revision cap, independent of failure type",
+  "scripted_responses": [
+    "{\"audience\":\"Marathon runners and daily joggers\",\"offer\":\"Ergonomic road running shoes\",\"tone\":\"Dynamic, inspiring\",\"allowed_claims\":[\"Breathable knit mesh upper\",\"Responsive foam cushion\"],\"banned_claims\":[\"Clinically proven speed boost\"],\"allowed_banned_phrases\":[]}",
+    "{\"headline\":\"The Ultimate Performance Running Shoes Designed To Help You Run Faster And Longer Daily\",\"subhead\":\"Engineered for long-distance comfort and durability.\",\"benefits\":[\"Breathable knit mesh upper\",\"Responsive foam cushion\",\"Lightweight design\"],\"cta\":\"Find Your Perfect Fit\",\"disclaimer\":\"Fictional athletic shoe brand.\",\"claims\":[\"Breathable knit mesh upper\",\"Responsive foam cushion\"]}",
+    "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>SwiftStride Running</title></head><body><h1>The Ultimate Performance Running Shoes Designed To Help You Run Faster And Longer Daily</h1><p>Engineered for long-distance comfort and durability.</p><ul><li>Breathable knit mesh upper</li><li>Responsive foam cushion</li></ul><a href=\"#shop\">Find Your Perfect Fit</a><p class=\"disclaimer\">Fictional athletic shoe brand.</p></body></html>",
+    "{\"score\":7,\"feedback\":\"Headline is too verbose.\"}",
+    "{\"headline\":\"Experience The Best Performance Running Shoes For Your Daily Training Routine And Long Runs\",\"subhead\":\"Engineered for long-distance comfort and durability.\",\"benefits\":[\"Breathable knit mesh upper\",\"Responsive foam cushion\",\"Lightweight design\"],\"cta\":\"Find Your Perfect Fit\",\"disclaimer\":\"Fictional athletic shoe brand.\",\"claims\":[\"Breathable knit mesh upper\",\"Responsive foam cushion\"]}",
+    "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>SwiftStride Running</title></head><body><h1>Experience The Best Performance Running Shoes For Your Daily Training Routine And Long Runs</h1><p>Engineered for long-distance comfort and durability.</p><ul><li>Breathable knit mesh upper</li><li>Responsive foam cushion</li></ul><a href=\"#shop\">Find Your Perfect Fit</a><p class=\"disclaimer\">Fictional athletic shoe brand.</p></body></html>",
+    "{\"score\":7,\"feedback\":\"Headline remains over 12 words.\"}"
+  ]
+}

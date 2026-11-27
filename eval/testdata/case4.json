@@ -1,0 +1,16 @@
+{
+  "id": 4,
+  "name": "Designer omits the CTA",
+  "input": "landing page for BrewBox, a fictional craft coffee subscription",
+  "expected_status": "approved",
+  "expected_route": "missing section caught → one revision (designer) → approved",
+  "what_it_catches": "Required sections check on HTML, and routing to the designer",
+  "scripted_responses": [
+    "{\"audience\":\"Coffee enthusiasts\",\"offer\":\"Curated whole-bean coffee subscription\",\"tone\":\"Rich, inviting\",\"allowed_claims\":[\"Single-origin ethically sourced beans\",\"Fresh roasted weekly\"],\"banned_claims\":[\"World's healthiest beverage\"],\"allowed_banned_phrases\":[]}",
+    "{\"headline\":\"Fresh Artisan Coffee Delivered To Your Kitchen\",\"subhead\":\"Discover exceptional micro-lot coffees from around the world.\",\"benefits\":[\"Single-origin ethically sourced beans\",\"Fresh roasted weekly\",\"Tasting notes included\"],\"cta\":\"Start Your Tasting Box\",\"disclaimer\":\"Fictional craft subscription brand.\",\"claims\":[\"Single-origin ethically sourced beans\",\"Fresh roasted weekly\"]}",
+    "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>BrewBox Coffee</title></head><body><h1>Fresh Artisan Coffee Delivered To Your Kitchen</h1><p>Discover exceptional micro-lot coffees from around the world.</p><ul><li>Single-origin ethically sourced beans</li><li>Fresh roasted weekly</li></ul><p class=\"disclaimer\">Fictional craft subscription brand.</p></body></html>",
+    "{\"score\":7,\"feedback\":\"Good copy but missing clear call to action button.\"}",
+    "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>BrewBox Coffee</title></head><body><h1>Fresh Artisan Coffee Delivered To Your Kitchen</h1><p>Discover exceptional micro-lot coffees from around the world.</p><ul><li>Single-origin ethically sourced beans</li><li>Fresh roasted weekly</li></ul><a href=\"#subscribe\" class=\"cta-btn\">Start Your Tasting Box</a><p class=\"disclaimer\">Fictional craft subscription brand.</p></body></html>",
+    "{\"score\":9,\"feedback\":\"Complete page with CTA and clear hierarchy.\"}"
+  ]
+}

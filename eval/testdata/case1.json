@@ -1,0 +1,14 @@
+{
+  "id": 1,
+  "name": "Clean idea, compliant output",
+  "input": "landing page for Strand, a fictional hair care subscription",
+  "expected_status": "approved",
+  "expected_route": "approved",
+  "what_it_catches": "Baseline. Nothing fires, no revision",
+  "scripted_responses": [
+    "{\"audience\":\"Adults seeking personalized hair care\",\"offer\":\"Customized shampoo and conditioner subscription\",\"tone\":\"Warm, scientific, approachable\",\"allowed_claims\":[\"Custom-formulated for your hair type\",\"Sulfate-free clean ingredients\",\"Delivered to your door monthly\"],\"banned_claims\":[\"Cures hair loss\",\"Permanent regrowth\"],\"allowed_banned_phrases\":[]}",
+    "{\"headline\":\"Smarter Hair Care Formulated For You\",\"subhead\":\"Custom formulas delivered to your door each month.\",\"benefits\":[\"Custom-formulated for your hair type\",\"Sulfate-free clean ingredients\",\"Delivered to your door monthly\"],\"cta\":\"Claim Your Custom Formula\",\"disclaimer\":\"Fictional brand. For demonstration purposes only.\",\"claims\":[\"Custom-formulated for your hair type\",\"Sulfate-free clean ingredients\",\"Delivered to your door monthly\"]}",
+    "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Strand Hair Care</title></head><body><h1>Smarter Hair Care Formulated For You</h1><p>Custom formulas delivered to your door each month.</p><ul><li>Custom-formulated for your hair type</li><li>Sulfate-free clean ingredients</li><li>Delivered to your door monthly</li></ul><a href=\"#claim\">Claim Your Custom Formula</a><p class=\"disclaimer\">Fictional brand. For demonstration purposes only.</p></body></html>",
+    "{\"score\":9,\"feedback\":\"High clarity, on-brand tone.\"}"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": 5,
+  "name": "Strategist returns broken JSON",
+  "input": "landing page for Nova, a fictional smart desk organizer",
+  "expected_status": "needs_human_review",
+  "expected_route": "needs_human_review, no revision",
+  "what_it_catches": "Malformed output is a failure, never approval",
+  "scripted_responses": [
+    "{\"audience\": \"busy professionals\", \"offer\": broken JSON syntax without closing brace"
+  ]
+}
