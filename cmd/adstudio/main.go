@@ -37,7 +37,7 @@ func main() {
 	if *liveMode {
 		fmt.Println("Model: Live/Mocked Gemini Client")
 	} else {
-		fmt.Println("Model: Scripted Model")
+		fmt.Println("Model: Contextual Mock Model")
 	}
 	fmt.Printf("Output Directory: %s\n\n", *outDir)
 
@@ -51,7 +51,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Print execution summary
+	// Print execution trace
 	fmt.Println("Execution Trace:")
 	for _, entry := range state.Trace {
 		fmt.Printf("  • %-26s %s\n", entry.Step, entry.Timestamp)
@@ -75,69 +75,13 @@ func main() {
 	fmt.Println("==================================================")
 
 	if state.Status == graph.StatusNeedsHumanReview {
-		// Exit code 0 as pipeline successfully concluded with needs_human_review status
 		os.Exit(0)
 	}
 }
 
 func createModel(live bool, idea string) model.Model {
-	// Standard scripted baseline responses for clean runs
-	brief := fmt.Sprintf(`{
-  "audience": "Customers seeking innovative solutions",
-  "offer": "%s",
-  "tone": "Warm, confident, and approachable",
-  "allowed_claims": ["Custom formulated", "Ethically sourced ingredients", "Delivered directly to your door"],
-  "banned_claims": ["Guaranteed medical cure", "Permanent miracle fix"],
-  "allowed_banned_phrases": []
-}`, idea)
-
-	copyData := `{
-  "headline": "Transform Your Routine With Smarter Daily Care",
-  "subhead": "Personalized formulations created exclusively for your needs.",
-  "benefits": [
-    "Custom formulated for your specific profile",
-    "Ethically sourced ingredients with complete transparency",
-    "Delivered directly to your door on your schedule"
-  ],
-  "cta": "Start Your Subscription Today",
-  "disclaimer": "Fictional brand for demonstration purposes.",
-  "claims": [
-    "Custom formulated",
-    "Ethically sourced ingredients",
-    "Delivered directly to your door"
-  ]
-}`
-
-	html := `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ad Studio Landing Page</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #222; max-width: 720px; margin: 40px auto; padding: 0 20px; }
-        h1 { color: #111; font-size: 2.2rem; }
-        .subhead { font-size: 1.2rem; color: #555; }
-        .benefits { margin: 24px 0; padding-left: 20px; }
-        .benefits li { margin-bottom: 8px; }
-        .cta-btn { display: inline-block; background: #0066cc; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; margin: 20px 0; }
-        .disclaimer { font-size: 0.85rem; color: #888; border-top: 1px solid #eee; padding-top: 12px; margin-top: 40px; }
-    </style>
-</head>
-<body>
-    <h1>Transform Your Routine With Smarter Daily Care</h1>
-    <p class="subhead">Personalized formulations created exclusively for your needs.</p>
-    <ul class="benefits">
-        <li>Custom formulated for your specific profile</li>
-        <li>Ethically sourced ingredients with complete transparency</li>
-        <li>Delivered directly to your door on your schedule</li>
-    </ul>
-    <a href="#subscribe" class="cta-btn">Start Your Subscription Today</a>
-    <p class="disclaimer">Fictional brand for demonstration purposes.</p>
-</body>
-</html>`
-
-	review := `{"score": 9, "feedback": "Well-structured landing page with clear value proposition and compliant claims."}`
-
-	return model.NewScriptedModel([]string{brief, copyData, html, review})
+	if live {
+		return model.NewGeminiModel(idea)
+	}
+	return model.NewContextualMockModel(idea)
 }
